@@ -20,6 +20,4 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-      - run: sudo npm ci
-      - run: npm cache clean --force
-      - run: pm2 restart shopdev-backend
+      - run: npm ci
