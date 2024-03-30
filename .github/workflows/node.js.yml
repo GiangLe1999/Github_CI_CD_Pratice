@@ -20,4 +20,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
       - run: npm ci
+      - name: Fix Permissions Again
+        run: sudo chown -R $USER:$USER ${{ github.workspace }}/node_modules
       - run: pm2 restart shopdev-backend
