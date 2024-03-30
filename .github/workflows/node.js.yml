@@ -9,6 +9,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Stop running processes
+        run: pm2 stop all || true
+
       - name: Fix Permissions
         run: sudo chown -R $USER:$USER ${{ github.workspace }}/node_modules
 
