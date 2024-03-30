@@ -6,20 +6,25 @@ on:
 jobs:
   build:
     runs-on: self-hosted
+    container:
+      image: ubuntu:latest
+      options: --privileged # Run the container in privileged mode to elevate permissions
     strategy:
       matrix:
         node-version: [20.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
-      - uses: actions/checkout@v3
-      - name: Fix Permissions
-        run: sudo chown -R $USER:$USER ${{ github.workspace }}/node_modules
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-      - run: npm ci
-      - name: Fix Permissions Again
-        run: sudo chown -R $USER:$USER ${{ github.workspace }}/node_modules
-      - run: pm2 restart shopdev-backend
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Restart application
+        run: pm2 restart shopdev-backend
